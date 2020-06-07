@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "996650498688",
+    "firebase_url": "https://power-chat-4141a.firebaseio.com",
+    "project_id": "power-chat-4141a",
+    "storage_bucket": "power-chat-4141a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996650498688:android:3fbd013a639c70efc58465",
+        "android_client_info": {
+          "package_name": "com.power_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996650498688-73o5m0i9isec3gaf6726cd71mls3oegr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.power_chat",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "996650498688-mf3rcjmtj04mcolvdmv96vgucikmphr1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX2b7Z9aqleMmI-4d0z-8UjEw6mcnwEIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996650498688-mf3rcjmtj04mcolvdmv96vgucikmphr1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

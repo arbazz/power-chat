@@ -10,6 +10,8 @@ import Result from './Result';
 import Message from './Message';
 import Singin from './Signin/Singin';
 import Register from './Register/index';
+import MyTopics from './MyTopic/index';
+import AccountSettings from './AccountSettings/index';
 
 export {
     Home,
@@ -23,5 +25,7 @@ export {
     Result,
     Message,
     Singin,
-    Register
+    Register,
+    MyTopics,
+    AccountSettings
 }

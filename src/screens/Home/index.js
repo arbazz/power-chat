@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LargeButton } from '../../Components/index'
+import {LoginContext} from '../../Context/LoginProvider';
 
 const Home = (props) => {
-
+  
+  useEffect(()=> {
+    // console.log(login)
+  }, [])
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>

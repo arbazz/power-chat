@@ -1,21 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { primaryColor } from '../../Config/color';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
-
+import { LoginContext } from '../../Context/LoginProvider';
+import AsyncStorage from '@react-native-community/async-storage';
+import { CommonActions } from "@react-navigation/native";
 
 export default function SignIn({navigation}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("") 
+    const [error, setError] = useState("");
+    const {user , login } = useContext(LoginContext);
+    const [userData, setUserData] = user
+    const [isLogin, setIsLogin] = login
+
+    useEffect(()=>{
+        console.log(login)
+        check()
+    },[])
+
+    const check = async() => {
+        const uid = await AsyncStorage.getItem("uid");
+        if(uid){
+            console.log(uid)
+            setIsLogin(true)
+        }
+    }
+
     const handleLogin = () => {
         if(email && password){
         auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                console.log('User account created & signed in!');
-                navigation.navigate("Home")
+            .signInWithEmailAndPassword(email, password)
+            .then((res) => {
+                // console.log('User account created & signed in!', res.user._user);
+                setUserData(res.user._user)
+                AsyncStorage.setItem("uid", res.user._user.uid);
+                setIsLogin(true)
+                navigation.navigate("Home");
             })
             .catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
@@ -26,6 +48,11 @@ export default function SignIn({navigation}) {
                 if (error.code === 'auth/invalid-email') {
                     console.log('That email address is invalid!');
                     setError('That email address is invalid!')
+                }
+
+                if (error.code === 'auth/wrong-password') {
+                    console.log('wrong password');
+                    setError('Incorrect password or email!')
                 }
 
                 console.log(error);

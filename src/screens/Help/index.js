@@ -15,7 +15,7 @@ const Help = ({navigation}) => {
             <TouchableOpacity style={styles.btnContianer}  onPress={() =>{ navigation.navigate("CreateTopic")}}>
                 <Text style={styles.btnText}>CREATE TOPIC</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnContianer}>
+            <TouchableOpacity style={styles.btnContianer} onPress={() => navigation.navigate("Profile")}>
                 <Text style={styles.btnText}>PROFILE</Text>
             </TouchableOpacity>
         </View>

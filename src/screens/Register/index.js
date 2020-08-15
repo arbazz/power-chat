@@ -42,7 +42,7 @@ export default function Register({navigation}) {
                             })
                             .then(() => {
                                 console.log('User added!');
-                                navigation.navigate("Home")
+                                navigation.navigate("Singin")
                             });
                     })
                     .catch(error => {

@@ -1,10 +1,23 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { primaryColor } from '../../Config/color';
 import { TextInput } from 'react-native-gesture-handler';
+import { SeachContext } from '../../Context/SearchProvide';
 
+const DescForm = ({navigation, route}) => {
 
-const DescForm = ({navigation}) => {
+    const [description, setDescription] = useState('');
+
+    const {topic , desc } = useContext(SeachContext);
+    const [searchTopic, setSearchTopic] = topic;
+    const [searchDesc, setSearchDesc] = desc;
+
+    const handleEnterPress = () =>{
+        // console.log(route.params.topicName);
+        setSearchTopic(route.params.topicName);
+        setSearchDesc(description)
+        navigation.navigate("Searching");
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -15,9 +28,12 @@ const DescForm = ({navigation}) => {
                 style={styles.input}
                 multiline
                 placeholder={"comp sci, homework, college, lab, assistance"}
+                value={description}
+                onChangeText={e=>setDescription(e)}
             />
-            <Text style={styles.titleText}>Age preference</Text>
-            <TouchableOpacity style={styles.enterBtnContianer} onPress={()=>navigation.navigate("Searching")}>
+            {/* to-do: add age later */}
+            {/* <Text style={styles.titleText}>Age preference</Text> */}
+            <TouchableOpacity style={styles.enterBtnContianer} onPress={()=>handleEnterPress()}>
                 <Text style={styles.textEnter}>Enter</Text>
             </TouchableOpacity>
         </ScrollView>

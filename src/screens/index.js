@@ -12,6 +12,7 @@ import Singin from './Signin/Singin';
 import Register from './Register/index';
 import MyTopics from './MyTopic/index';
 import AccountSettings from './AccountSettings/index';
+import AddInterestedTopics from './AddInterestTopic';
 
 export {
     Home,
@@ -27,5 +28,6 @@ export {
     Singin,
     Register,
     MyTopics,
-    AccountSettings
+    AccountSettings,
+    AddInterestedTopics
 }

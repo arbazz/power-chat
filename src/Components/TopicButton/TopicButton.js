@@ -8,7 +8,7 @@ const width = Dimensions.get("window").width;
 const TopicButton = ({title, nav}) => {
 
     return(
-        <TouchableOpacity style={styles.container} onPress={() => {nav.navigate("DescForm")}}>
+        <TouchableOpacity style={styles.container} onPress={() => {nav.navigate("DescForm", {topicName: title})}}>
             <Text style={styles.title}>{title}</Text>
         </TouchableOpacity>
     )

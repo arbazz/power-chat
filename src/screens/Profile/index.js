@@ -1,45 +1,93 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, TouchableOpacityBase } from 'react-native';
 import { primaryColor, secondaryColor } from '../../Config/color';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Profile = ({ navigation }) => {
-    console.log(navigation)
+
+    const [data, setData] = useState('')
 
     const handleAccoutnSettingTap = () => {
-        navigation.navigate("AccountSettings")
+        navigation.navigate("AccountSettings", { data })
     }
 
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Image
-                style={styles.image}
-                source={require('../../../assets/images/profile.jpeg')}
-            />
-            <View style={styles.nameCOntainer}>
-                <Text style={styles.name}>Larry David</Text>
-                <Text style={styles.cases}>100 CASES</Text>
-            </View>
-            <View style={styles.otherContaienr}>
-                <Text style={[styles.extrafont, styles.aboutmr]}>About Me</Text>
-                <Text style={[styles.extrafont]}>(18 year old)</Text>
-                <Text style={[styles.extrafont]}>University with lnowlegde of python and java. Willing to help with assingments or answering any general questions</Text>
-                <Text style={[styles.extrafont, styles.aboutmr]}>Comments</Text>
-                <Text style={[styles.extrafont]}>- This guy knows stuff!!!</Text>
-            </View>
-            <TouchableOpacity style={styles.btnAccount} onPress={() => handleAccoutnSettingTap()}>
-                <Text style={styles.textaccount}>Account Settings</Text>
-            </TouchableOpacity>
-        </ScrollView>
-    )
+    useEffect(() => {
+        fetchData()
+    }, []);
+
+    const fetchData = async () => {
+        const uid = await checkLogin();
+        const docId = await AsyncStorage.getItem("docId");
+        if (!uid) {
+            navigation.goBack();
+            alert("Please login!");
+            return;
+        } else {
+            firestore().collection("Users").doc(docId).get().then(function (doc) {
+                if (doc.exists) {
+                    // console.log("Document data:", doc.data());
+                    setData(doc.data());
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                    alert("error occured")
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+        }
+    }
+
+    const checkLogin = async () => {
+        const uid = await AsyncStorage.getItem("uid");
+        return uid;
+    };
+
+    if (!data) {
+        return (
+            <ActivityIndicator />
+        )
+    } else {
+        return (
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image
+                    style={styles.image}
+                    source={require('../../../assets/images/profile.jpeg')}
+                />
+                <View style={styles.nameCOntainer}>
+                    <Text style={styles.name}>{data.firstName} {data.lastName}</Text>
+                    <Text style={styles.cases}>{data.cases ? data.cases : 0} CASES</Text>
+                </View>
+                {/* interests button */}
+                <View>
+                    <TouchableOpacity style={styles.interestBtn}  onPress={()=>navigation.navigate("AddInterestedTopics")}>
+                        <Text style={styles.textInt}>Interests</Text>
+                    </TouchableOpacity>
+                    {/* to-do:remove */}
+                    <Text style={{textAlign: 'center'}}>Please suggest a name. its for adding the topics so one can match with those added topics</Text>
+                </View>
+                <View style={styles.otherContaienr}>
+                    <Text style={[styles.extrafont, styles.aboutmr]}>About Me</Text>
+                    <Text style={[styles.extrafont]}>{data.aboutMe}</Text>
+                    <Text style={[styles.extrafont, styles.aboutmr]}>Comments</Text>
+                    <Text style={[styles.extrafont]}>- This guy knows stuff!!!</Text>
+                </View>
+                <TouchableOpacity style={styles.btnAccount} onPress={() => handleAccoutnSettingTap()}>
+                    <Text style={styles.textaccount}>Account Settings</Text>
+                </TouchableOpacity>
+                <View style={{ height: 30 }} />
+            </ScrollView>
+        )
+    }
 }
 
 export default Profile;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
     },
     image: {
         width: 160,
@@ -91,5 +139,19 @@ const styles = StyleSheet.create({
     textaccount: {
         color: secondaryColor,
         fontSize: 33
+    },
+    interestBtn: {
+        alignSelf: 'center',
+        backgroundColor: primaryColor,
+        marginTop: 10,
+        marginBottom: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10
+    },
+    textInt: {
+        color: 'white',
+        fontSize: 19,
+        fontWeight: 'bold'
     }
 })

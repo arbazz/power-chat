@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native';
 import { primaryColor, secondaryColor } from '../../Config/color';
 import { ScrollView, } from 'react-native-gesture-handler';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export default function AccountSettings() {
+export default function AccountSettings({route}) {
 
     const [name, setName] = useState("");
     const [username, setUserName] = useState("");
@@ -11,6 +13,43 @@ export default function AccountSettings() {
     const [NotificationTag, setNotificationTag] = useState("");
     const [passwrod, setPaswword] = useState("");
     const [dob, setDob] = useState("");
+    const [data, setData] = useState('');
+
+    useEffect(()=>{
+        // console.log(route.params.data);
+        // getthing from route if data exist prefilling the fields
+        if(route.params.data){
+            const data = route.params.data;
+            setData(route.params.data);
+            setUserName(data.username);
+            setName(data.firstName + " " + data.lastName);
+            setAboutMe(data.aboutMe)
+        }
+    },[])
+
+    const handleAccoutnSettingTap = async() =>{
+        const docId = await AsyncStorage.getItem("docId");
+        console.log(docId);
+        if(!docId){
+            alert("Please login first");
+        }else if(!username){
+            alert("username cannot be empty");
+        }else if(!aboutMe){
+            alert("about me cannot be empty");
+        }else{
+            var docRef = firestore().collection('Users').doc(docId);
+            docRef
+            .update({
+                username,
+                firstName: name,
+                aboutMe
+            }).then(()=>{
+                alert("changes saved");
+            }).catch((e)=>{
+                alert(e);
+            })
+        }
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -39,10 +78,12 @@ export default function AccountSettings() {
                 <TextInput 
                     style={[styles.textInp, styles.textArea]}
                     multiline={true}
+                    onChangeText={(e) => setAboutMe(e)}
+                    value={aboutMe}
                 />
             </View>
-            <TouchableOpacity style={styles.btnAccount} onPress={() => handleAccoutnSettingTap()}>
-                <Text style={styles.textaccount}>Account Settings</Text>
+            <TouchableOpacity style={styles.btnAccount} onPress={handleAccoutnSettingTap}>
+                <Text style={styles.textaccount}>save</Text>
             </TouchableOpacity>
         </ScrollView>
     )

@@ -17,7 +17,8 @@ import {
     Singin,
     Register,
     MyTopics,
-    AccountSettings
+    AccountSettings,
+    AddInterestedTopics
 } from '../screens/index';
 import { primaryColor } from '../Config/color';
 
@@ -29,7 +30,7 @@ function App() {
     const {user , login } = React.useContext(LoginContext);
     const [userData, setUserData] = user
     const [isLogin, setIsLogin] = login
-    console.log("login", isLogin)
+    // console.log("login", isLogin)
     return (
         <Stack.Navigator screenOptions={{
             headerStyle: {
@@ -52,6 +53,7 @@ function App() {
                     <Stack.Screen name="Message" component={Message} />
                     <Stack.Screen name="MyTopics" component={MyTopics} />
                     <Stack.Screen name="AccountSettings" component={AccountSettings} />
+                    <Stack.Screen name="AddInterestedTopics" component={AddInterestedTopics} />
                 </>
             }
         </Stack.Navigator>

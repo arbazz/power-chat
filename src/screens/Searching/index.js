@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -7,13 +7,38 @@ import {
     TextInput
 } from 'react-native';
 import { primaryColor } from '../../Config/color';
+import { SeachContext } from '../../Context/SearchProvide';
+import firestore from '@react-native-firebase/firestore';
 
+const topics = firestore().collection("addedTopic");
 
 const Searching = (props) => {
+    const { topic, desc } = useContext(SeachContext);
+    const [searchTopic, setSearchTopic] = topic;
+    const [searchDesc, setSearchDesc] = desc;
+    const [match, setMatch] = useState([]);
 
-    useEffect(()=>{
-        props.navigation.navigate("Result")
-    })
+    useEffect(() => {
+        // console.log(searchTopic);
+        // console.log(searchDesc);
+        getMatch();
+
+    },[])
+
+    const getMatch = () => {
+        let temp = []
+        topics.where("name", "==", searchTopic)
+            .get()
+            .then((snap) => {
+                snap.forEach(function (doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    temp.push({ docId: doc.id, data: doc.data() });
+                });
+                setMatch(temp);
+            })
+    }
+    // props.navigation.navigate("Result")
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Searching...</Text>
@@ -41,12 +66,12 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginLeft: 30
     },
-    cancelContianer:{
+    cancelContianer: {
         flex: 0.9,
         justifyContent: 'center',
         alignItems: 'center',
-    },  
-    btnContainer:{
+    },
+    btnContainer: {
         borderColor: 'red',
         borderWidth: 2,
         width: '60%',
@@ -56,7 +81,7 @@ const styles = StyleSheet.create({
         borderRadius: 360,
         borderBottomWidth: 4
     },
-    btnText:{
+    btnText: {
         color: 'red',
         fontSize: 20
     }

@@ -6,7 +6,7 @@ import { primaryColor } from '../../Config/color';
 
 const Result = ({navigation}) =>{
     return(
-        <SafeAreaView>
+        <>
             <View style={styles.container}>
                 <Text style={styles.title}>PowerBuddy Found </Text>
                 <Image source={require("../../../assets/images/profile.jpeg")} style={styles.image}/>
@@ -25,7 +25,7 @@ const Result = ({navigation}) =>{
             <TouchableOpacity style={styles.cancleBtn} onPress={() => navigation.goBack()}>
                 <Text style={styles.cancel}>X</Text>
             </TouchableOpacity>
-        </SafeAreaView>
+        </>
     )
 }
 

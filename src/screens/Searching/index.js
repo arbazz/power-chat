@@ -27,18 +27,20 @@ const Searching = (props) => {
 
     const getMatch = () => {
         let temp = []
+        console.log(searchTopic)
         topics.where("name", "==", searchTopic)
             .get()
             .then((snap) => {
                 snap.forEach(function (doc) {
                     // doc.data() is never undefined for query doc snapshots
-                    console.log(doc.id, " => ", doc.data());
+                    // console.log(doc.id, " => ", doc.data());
                     temp.push({ docId: doc.id, data: doc.data() });
                 });
                 setMatch(temp);
+                    props.navigation.navigate("Result", {data: temp})
+
             })
     }
-    // props.navigation.navigate("Result")
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Searching...</Text>

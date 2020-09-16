@@ -25,8 +25,14 @@ const Result = ({ navigation, route }) => {
     }, []);
 
     const getBuddyData = () => {
+        console.log(route.params)
         let temp = []
         // data.uid is the matched user uid;
+        if(!route.params.data || !route.params.data.length){
+            alert("error!");
+            navigation.navigate("Home")
+            return;
+        }else{
         buddy.where("uid", "==", route.params.data[0].data.uid)
             .get()
             .then((snap) => {
@@ -36,6 +42,7 @@ const Result = ({ navigation, route }) => {
                 setBuddyData(temp);
                 // console.log(temp)
             })
+    }
     }
 
     if (!buddyData.length) {
